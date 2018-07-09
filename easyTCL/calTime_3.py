@@ -39,67 +39,13 @@ class tclRoom:
             time_tcl += time
         return time_tcl
     
-    def roomTimeB(self, number):
-        self.number = number
-        wb = openpyxl.load_workbook('data_B.xlsx', data_only=True)
-        ws = wb['datasheet']
-        rawList = []
-        for i in range(1, 500):
-            cell = ws.cell(row = i, column = self.number).value
-            if cell:
-                rawList.append(cell)            
-        calTime = []
-        a = 3
-        while a < len(rawList):
-            calTime.append(rawList[a])
-            a += 3
-            time_tcl = 0
-        for i in calTime:
-            time = int(i[3:]) -int(i[:2])
-            time_tcl += time
-        return time_tcl
-        
-        
-    def roomTimeP(self, number):
-        self.number = number
-        wb = openpyxl.load_workbook('C:\workspace\easyLife\easyTCL\data_P.xlsx', data_only=True)
-        ws = wb['datasheet']
-        rawList = []
-        for i in range(1, 500):
-            cell = ws.cell(row = i, column = self.number).value
-            if cell:
-                rawList.append(cell)            
-        calTime = []
-        a = 3
-        while a < len(rawList):
-            calTime.append(rawList[a])
-            a += 3
-            time_tcl = 0
-        for i in calTime:
-            time = int(i[3:]) -int(i[:2])
-            time_tcl += time
-        return time_tcl
     
-    
-    def sumTimeB(self, *args):
-        result = 0
-        for i in args:
-            result += self.roomTimeB(i)
-        print(result)
-
-
-    def sumTimeP(self, *args):
-        result = 0
-        for i in args:
-            result += self.roomTimeP(i)
-        print(result)
-        
     def sumTime(self, *args):
         result = 0
         for inputFile in inputList:
             for i in args:
                 result += self.roomTime(i, inputFile)
-            print(result)
+            print(inputFile + ": " + str(result))
             result = 0
     
     
@@ -204,8 +150,6 @@ class tclRoom:
 
   
 total = tclRoom()
-#total.sumTimeB(2,3,4)
-#total.sumTimeP(2,3,4)
 total.sumTime(2,3,4)
 #total.sumLabB(2,3,4)
 
