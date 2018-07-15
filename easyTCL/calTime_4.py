@@ -22,6 +22,7 @@ class tclRoom:
         self.number = number
         wb = openpyxl.load_workbook(inputFile, data_only=True)
         ws = wb['datasheet']
+        
         rawList = []
         for i in range(1, 500):
             cell = ws.cell(row = i, column = self.number).value
@@ -44,16 +45,17 @@ class tclRoom:
         for inputFile in inputList:
             for i in args:
                 result += self.calTime(i, inputFile)
+                print(inputFile + str(i) + ": " + str(self.calTime(i, inputFile)))
             print(inputFile + ": " + str(result))
             result = 0
     
     
-    def listLabB(self, number):
-        wb1 = openpyxl.load_workbook('C:\workspace\easyLife\easyTCL\data_B.xlsx', data_only=True)
-        ws1 = wb1['datasheet']
-        wb2 = openpyxl.load_workbook('C:\workspace\easyLife\easyTCL\labList.xlsx', data_only=True)
-        ws2 = wb2['rawdata']   
+    def listLab(self, number, inputFile):
         self.number = number
+        wb1 = openpyxl.load_workbook(inputFile, data_only=True)
+        ws1 = wb1['datasheet']
+        wb2 = openpyxl.load_workbook('labList.xlsx', data_only=True)
+        ws2 = wb2['rawdata']   
 
         user = []
         rawData = []
@@ -83,72 +85,18 @@ class tclRoom:
         for i in nameList:
             if i in rawLabList:
                 labList.add(rawLabList[i])
-        print(labList)
         return list(labList)
 
-  
-    def listLabP(self, number):
-        wb1 = openpyxl.load_workbook('C:\workspace\easyLife\easyTCL\data_P.xlsx', data_only=True)
-        ws1 = wb1['datasheet']
-        wb2 = openpyxl.load_workbook('C:\workspace\easyLife\easyTCL\labList.xlsx', data_only=True)
-        ws2 = wb2['rawdata']   
-        self.number = number
-
-        user = []
-        rawData = []
-        for i in range(1, 1000):
-            cell = ws1.cell(row = i, column = self.number).value
-            if cell:
-                rawData.append(cell)     
-
-        a = 1
-        while a < len(rawData):
-            user.append(rawData[a])
-            a += 3
-
-        nameList = []       
-        for i in range(0, len(user)):
-            name = user[i][-3:]
-            if name not in nameList:
-                nameList.append(name)    
-                
-        rawLabList = {}
-        for i in range(1, 500):
-            name = ws2.cell(row = i, column = 1).value
-            lab = ws2.cell(row = i, column = 2).value
-            rawLabList[name] = lab
-        
-        labList = set()
-        for i in nameList:
-            if i in rawLabList:
-                labList.add(rawLabList[i])
-        print(labList)
-        return list(labList)
     
-    
-    def sumLabB(self, *args):
+    def sumLab(self, *args):
         sumLab = []
-        for i in args:
-            sumLab += self.listLabB(i)
-        sumLab2 = list(set(sumLab))    
+        for inputFile in inputList:
+            for i in args:
+                sumLab += self.listLab(i, inputFile)
+                sumLab2 = list(set(sumLab))    
+            print(inputFile + "Lab list is: " + str(len(sumLab2)))
 
-        result = {}
-        result[len(sumLab2)] = sumLab2
-        print(result)
-    #왜 2,3,4 넣은 값이 각각 보일까
-    
-    def sumLabP(self, *args):
-        sumLab = []
-        for i in args:
-            sumLab += self.listLabP(i)
-        sumLab = list(set(sumLab))    
 
-        result = {}
-        result[len(sumLab)] = sumLab
-        print(result)
-
-  
 total = tclRoom()
 total.sumTime(2,3,4)
-#total.sumLabB(2,3,4)
-
+total.sumLab(2,3,4)
